@@ -1,0 +1,9 @@
+.git/*
+.idea/*
+.vs/*
+Binaries/*
+DerivedDataCache/*
+Intermediate/*
+Plugins/*
+Saved/*
+*.sln
