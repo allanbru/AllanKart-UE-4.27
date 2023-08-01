@@ -5,6 +5,8 @@
 #include "AllanKart/Cars/Kart.h"
 #include "AllanKart/LevelEditor/Ground.h"
 #include "AllanKart/LevelEditor/LevelSaveGame.h"
+#include "AllanKart/PlayerController/KartPlayerController.h"
+#include "GameFramework/PlayerStart.h"
 #include "Kismet/GameplayStatics.h"
 
 AValidationGameMode::AValidationGameMode()
@@ -15,7 +17,7 @@ AValidationGameMode::AValidationGameMode()
 void AValidationGameMode::BeginPlay()
 {
     Super::BeginPlay();
-    
+
     AActor* GroundCandidate = UGameplayStatics::GetActorOfClass(this, AGround::StaticClass());
     if(GroundCandidate)
     {
@@ -25,7 +27,7 @@ void AValidationGameMode::BeginPlay()
 
     USaveGame* SavedMap = UGameplayStatics::LoadGameFromSlot(TEXT("__PlayingMap__"), 0);
     if(!SavedMap) return;
-	
+
     const ULevelSaveGame* SavedLevel = Cast<ULevelSaveGame>(SavedMap);
     if(!SavedLevel) return;
 
@@ -39,20 +41,39 @@ void AValidationGameMode::BeginPlay()
 void AValidationGameMode::StartRace()
 {
     if(!Ground) return;
-	// Bind Events
-	APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(this, 0);
-	if(PlayerPawn)
-	{
-		AKart* PlayerKart = Cast<AKart>(PlayerPawn);
-		if(PlayerKart)
-		{
-			PlayerKart->SetCanAffectNavigationGeneration(false, true);
-			const FTransform GridSlot = Ground->GetGridTransformAtPosition(0);
-			PlayerKart->SetActorTransform(GridSlot);
-		}
-	}
 
-	AGameMode::StartMatch();	
+    // Delete all PlayerStarts
+
+    TArray<AActor*> AllStarts;
+    UGameplayStatics::GetAllActorsOfClass(this, APlayerStart::StaticClass(), AllStarts);
+    for(AActor* Start : AllStarts)
+    {
+        if(Start) Start->Destroy();
+    }
+
+    // Create PlayerStarts
+    AController* PlayerController = UGameplayStatics::GetPlayerController(this, 0);
+    if(PlayerController)
+    {
+        const FTransform GridSlot = Ground->GetGridTransformAtPosition(0);
+        AKartPlayerController* KartPlayerController = Cast<AKartPlayerController>(PlayerController);
+        if(KartPlayerController)
+        {
+            APlayerStart* NewStart = GetWorld()->SpawnActor<APlayerStart>(APlayerStart::StaticClass(), GridSlot);
+            if(NewStart)
+            {
+                NewStart->SetReplicates(true);
+                ChoosePlayerStart(KartPlayerController);
+            }
+            KartPlayerController->SetGridSlot(GridSlot);
+            KartPlayerController->SetInitialLocationAndRotation(GridSlot.GetLocation(), GridSlot.GetRotation().Rotator());
+        }
+    }
+
+	// Bind Events
+
+
+	AGameMode::StartMatch();
 }
 
 void AValidationGameMode::PassedCheckpoint(AKart* Player, int32 Lap, int32 Checkpoint, float TotalTime)

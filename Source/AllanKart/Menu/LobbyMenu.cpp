@@ -75,7 +75,7 @@ bool ULobbyMenu::Initialize()
 		StartButton->OnClicked.AddDynamic(this, &ThisClass::StartButtonClicked);
 		MainMenuButton->OnClicked.AddDynamic(this, &ThisClass::MainMenuButtonClicked);
 	}
-	
+
 	return true;
 }
 
@@ -86,7 +86,7 @@ void ULobbyMenu::NewPlayerJoined(APlayerState* NewPlayer)
 		Players.AddUnique(NewPlayer);
 		MulticastUpdatePlayersList();
 	}
-	
+
 }
 
 void ULobbyMenu::PlayerLeft(APlayerState* LeavingPlayer)
@@ -138,8 +138,8 @@ void ULobbyMenu::MainMenuButtonClicked()
 			MenuTearDown();
             PlayerController->ClientTravel(PathToMainMenu, ETravelType::TRAVEL_Absolute);
 		}
-		
-	}	
+
+	}
 }
 
 void ULobbyMenu::MenuTearDown()

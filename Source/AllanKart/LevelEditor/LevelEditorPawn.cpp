@@ -57,6 +57,10 @@ void ALevelEditorPawn::BeginPlay()
 	TopDownCamera->SetActive(true);
 	bTopDownCamera = true;
 
+    // I have a mistake with the camera at the beggining.... dk why
+    SwitchCamera();
+    SwitchCamera();
+
 	if(FindGround())
 	{
 		const auto& FoundItem = InventoryComponent->GetSelectedItem();

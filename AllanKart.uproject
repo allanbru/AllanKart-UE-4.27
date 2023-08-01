@@ -123,6 +123,10 @@
 		{
 			"Name": "SubversionSourceControl",
 			"Enabled": false
+		},
+		{
+			"Name": "OnlineSubsystemNull",
+			"Enabled": false
 		}
 	]
 }

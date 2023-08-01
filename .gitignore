@@ -2,8 +2,10 @@
 .idea/*
 .vs/*
 Binaries/*
+Build/*
 DerivedDataCache/*
 Intermediate/*
 Plugins/*
 Saved/*
 *.sln
+Content/*
