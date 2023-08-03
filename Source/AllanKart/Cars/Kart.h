@@ -9,11 +9,11 @@
 #include "Kart.generated.h"
 
 /**
- * 
+ *
  */
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnRaceFinishedSignature, AKart*, FinishingPlayer, float, FinishingTime);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FOnCheckpointPassedSignature, AKart*, Player, int32, Lap, int32, CheckpointNumber, float, RaceTime);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnRaceFinishedSignature, AKartPlayerState*, FinishingPlayer, float, FinishingTime);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FOnCheckpointPassedSignature, AKartPlayerState*, Player, int32, Lap, int32, CheckpointNumber, float, RaceTime);
 
 UCLASS()
 class ALLANKART_API AKart : public AWheeledVehicle
@@ -31,7 +31,7 @@ public:
 	FOnCheckpointPassedSignature OnCheckpointPassed;
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-	
+
 	UFUNCTION(BlueprintCallable)
 	void SetDriver(const FKartDriver& NewDriver);
 
@@ -75,9 +75,9 @@ private:
 	void UpdateHUD();
 
 	void ThrottleInput(float Throttle);
-		
+
 	void BrakeInput(float Brake);
-	
+
 	void SteeringInput(float Steering);
 
 	bool bPlayingAnimation{ false };
@@ -121,5 +121,5 @@ public:
 	FORCEINLINE int32 GetNumberOfCheckpoints() const { return NumberOfCheckpoints;  }
 	FORCEINLINE void SetNumberOfCheckpoints(int32 NewNumberOfCheckpoints) { NumberOfCheckpoints = NewNumberOfCheckpoints;  }
 	FORCEINLINE void SetNumberOfLaps(int32 NewNumberOfLaps) { NumberOfLaps = NewNumberOfLaps; }
-	
+
 };

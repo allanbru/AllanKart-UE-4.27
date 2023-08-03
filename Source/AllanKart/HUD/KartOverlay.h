@@ -6,18 +6,19 @@
 #include "Blueprint/UserWidget.h"
 #include "Components/TextBlock.h"
 #include "Components/ProgressBar.h"
+#include "Components/VerticalBox.h"
 #include "PositionOverlay.h"
-#include "Components/ListView.h"
+
 #include "KartOverlay.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class ALLANKART_API UKartOverlay : public UUserWidget
 {
 	GENERATED_BODY()
-	
+
 public:
 
 	virtual void NativeConstruct() override;
@@ -40,17 +41,16 @@ public:
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* FastestLap;
 
+    UPROPERTY(meta = (BindWidget))
+    UVerticalBox* NearestPositions;
+
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UPositionOverlay> PositionWidgetClass;
 
 	UPROPERTY(EditAnywhere)
 	int32 PositionsToShow{5};
-	
+
 	UPROPERTY(VisibleAnywhere)
 	TArray<UPositionOverlay*> PositionOverlay;
 
-	//UPROPERTY(meta = (BindWidget))
-	UPROPERTY()
-	UListView* PositionsList;
-	
 };

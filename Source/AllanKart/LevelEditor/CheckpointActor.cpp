@@ -3,14 +3,13 @@
 
 #include "CheckpointActor.h"
 #include "Components/BoxComponent.h"
-#include "Components/SphereComponent.h"
 #include "AllanKart/Cars/Kart.h"
 
 // Sets default values
 ACheckpointActor::ACheckpointActor()
 {
 	PrimaryActorTick.bCanEverTick = true;
-	
+
 	TriggerBox = CreateDefaultSubobject<UBoxComponent>(TEXT("Checkpoint Trigger Box"));
 	TriggerBox->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	TriggerBox->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
@@ -42,10 +41,5 @@ void ACheckpointActor::OverlapWithCar(UPrimitiveComponent* OverlappedComponent, 
 			}
 		}
 	}
-}
-
-void ACheckpointActor::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
 }
 

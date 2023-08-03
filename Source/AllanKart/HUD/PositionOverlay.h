@@ -9,7 +9,7 @@
 #include "PositionOverlay.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class ALLANKART_API UPositionOverlay : public UUserWidget, public IUserObjectListEntry
@@ -18,10 +18,6 @@ class ALLANKART_API UPositionOverlay : public UUserWidget, public IUserObjectLis
 
 public:
 
-	virtual void NativeConstruct() override;
-
-	virtual void NativeOnListItemObjectSet(UObject* ListItemObject) override;
-	
 	UPROPERTY(meta = (BindWidget), BlueprintReadWrite)
 	UTextBlock* DriverPosition;
 
@@ -30,5 +26,5 @@ public:
 
 	UPROPERTY(meta = (BindWidget), BlueprintReadWrite)
 	UTextBlock* DriverDifference;
-	
+
 };

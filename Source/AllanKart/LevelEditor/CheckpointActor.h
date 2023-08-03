@@ -22,14 +22,13 @@ UCLASS()
 class ALLANKART_API ACheckpointActor : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	ACheckpointActor();
-	virtual void Tick(float DeltaTime) override;
 
 	UPROPERTY(VisibleAnywhere)
 	ECheckpointType CheckpointType{ ECheckpointType::ECT_Sector };
-	
+
 	UPROPERTY(VisibleAnywhere)
 	class UBoxComponent* TriggerBox;
 
@@ -45,7 +44,7 @@ private:
 	int32 NumberOfCheckpoints{ -1 };
 	int32 NumberOfLaps{ -1 };
 
-public:	
+public:
 	FORCEINLINE void SetCheckpointNumber(int32 Number) { CheckpointNumber = (CheckpointNumber == -1) ? Number : CheckpointNumber; }
 	FORCEINLINE int32 GetCheckpointNumber() const { return CheckpointNumber; }
 	FORCEINLINE void SetNumberOfCheckpoints(int32 Number) { NumberOfCheckpoints = (NumberOfCheckpoints == -1) ? Number : NumberOfCheckpoints; }

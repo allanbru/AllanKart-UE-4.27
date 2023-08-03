@@ -6,7 +6,7 @@
 void UKartOverlay::NativeConstruct()
 {
 	Super::NativeConstruct();
-	
+
 	if(PositionWidgetClass)
 	{
 		for(int32 i=0; i<PositionsToShow; i++)
@@ -15,8 +15,7 @@ void UKartOverlay::NativeConstruct()
 			if (PositionWidget)
 			{
 				PositionWidget->SetVisibility(ESlateVisibility::Visible);
-				PositionOverlay.Add(PositionWidget);
-				//PositionsList->AddItem(PositionWidget);
+				NearestPositions->AddChildToVerticalBox(PositionWidget);
 			}
 		}
 	}

@@ -2,10 +2,10 @@
 
 
 #include "ValidationGameMode.h"
-#include "AllanKart/Cars/Kart.h"
 #include "AllanKart/LevelEditor/Ground.h"
 #include "AllanKart/LevelEditor/LevelSaveGame.h"
 #include "AllanKart/PlayerController/KartPlayerController.h"
+#include "AllanKart/PlayerState/KartPlayerState.h"
 #include "GameFramework/PlayerStart.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -76,22 +76,25 @@ void AValidationGameMode::StartRace()
 	AGameMode::StartMatch();
 }
 
-void AValidationGameMode::PassedCheckpoint(AKart* Player, int32 Lap, int32 Checkpoint, float TotalTime)
+void AValidationGameMode::PassedCheckpoint_Implementation(AKartPlayerState* Player)
 {
 	float PlayerSpeed = -1.f;
 	if(Player)
 	{
-		PlayerSpeed = Player->GetVelocity().Size();
+	    const APawn* Pawn = Player->GetPawn();
+        if(!Pawn) return;
+	    PlayerSpeed = Pawn->GetVelocity().Size();
 	}
-	UE_LOG(LogTemp, Warning, TEXT("Checkpoint %d, Lap %d, Speed: %.2f"), Lap, Checkpoint, PlayerSpeed);
 }
 
-void AValidationGameMode::FinishedRace(AKart* Player, float TotalTime)
+void AValidationGameMode::FinishedRace_Implementation(AKartPlayerState* Player, float TotalTime)
 {
 	float PlayerSpeed = -1.f;
 	if(Player)
 	{
-		PlayerSpeed = Player->GetVelocity().Size();
+	    const APawn* Pawn = Player->GetPawn();
+	    if(!Pawn) return;
+		PlayerSpeed = Pawn->GetVelocity().Size();
 	}
 	UE_LOG(LogTemp, Warning, TEXT("Player finished the race in %.2f, Speed: %.2f"), TotalTime, PlayerSpeed);
 }

@@ -48,7 +48,7 @@ void AKart::BeginPlay()
 {
 	Super::BeginPlay();
 	SetReplicateMovement(true);
-	
+
 	SetCanAffectNavigationGeneration(false, true);
 	if(GetVehicleMovementComponent())
 	{
@@ -61,7 +61,7 @@ void AKart::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 	PollInit();
-	
+
 	UpdateEngineSound();
 	UpdateHUD();
 }
@@ -155,7 +155,7 @@ void AKart::SteeringInput(float Steering)
 
 void AKart::PlayCelebrationMontage_Implementation()
 {
-	MulticastPlayCelebrationMontage();	
+	MulticastPlayCelebrationMontage();
 }
 
 void AKart::MulticastPlayCelebrationMontage_Implementation()
@@ -201,17 +201,17 @@ void AKart::SetCurrentCheckpoint(int32 Checkpoint, ECheckpointType CheckpointTyp
 		bIsABot = true;
 		if(!AIKartController) return;
 	}
-	
+
 	const float CurrentWorldTime = (bIsABot) ? GetWorld()->GetTimeSeconds() : KartController->GetServerTime();
 	const float CurrentLapTime = CurrentWorldTime - TimeOffset;
-	OnCheckpointPassed.Broadcast(this, CurrentLap, Checkpoint, CurrentWorldTime);
-	
+	if(KartPlayerState) OnCheckpointPassed.Broadcast(KartPlayerState, CurrentLap, Checkpoint, CurrentWorldTime);
+
 	if(!bIsABot) KartController->SetHUDTimer(CurrentLapTime);
 	if (Checkpoint == CurrentCheckpoint + 1)
 	{
 		CurrentCheckpoint = Checkpoint;
 	}
-	
+
 	if (CheckpointType == ECheckpointType::ECT_Finish)
 	{
 		// FinishCircuit
@@ -221,7 +221,7 @@ void AKart::SetCurrentCheckpoint(int32 Checkpoint, ECheckpointType CheckpointTyp
 			if(!bIsABot) KartController->SetHUDFastestLap(CurrentLapTime);
 			PlayCelebrationMontage();
 		}
-		OnRaceFinished.Broadcast(this, CurrentWorldTime);
+	    if(KartPlayerState) OnRaceFinished.Broadcast(KartPlayerState, CurrentWorldTime);
 	}
 
 	if (CheckpointType == ECheckpointType::ECT_StartAndFinish && CurrentCheckpoint != -1 && CurrentCheckpoint == NumberOfCheckpoints - 1)
@@ -238,7 +238,7 @@ void AKart::SetCurrentCheckpoint(int32 Checkpoint, ECheckpointType CheckpointTyp
 		CurrentCheckpoint = Checkpoint;
 		if (CurrentLap == NumberOfLaps)
 		{
-			OnRaceFinished.Broadcast(this, CurrentWorldTime);
+			if(KartPlayerState) OnRaceFinished.Broadcast(KartPlayerState, CurrentWorldTime);
 		}
 	}
 

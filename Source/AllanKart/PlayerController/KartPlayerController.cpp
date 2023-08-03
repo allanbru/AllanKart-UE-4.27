@@ -133,7 +133,7 @@ void AKartPlayerController::SetHUDRevs(float Revs, float MaxRevs)
 
 void AKartPlayerController::SetHUDPosition_Implementation(const int32 PositionInScreen, const int32 Position, const FString& PlayerName, const float TimeDiff)
 {
-	if(KartHUD && KartHUD->KartOverlay && PositionInScreen < KartHUD->KartOverlay->PositionOverlay.Num() && KartHUD->KartOverlay->PositionOverlay[PositionInScreen] != nullptr)
+	if(KartHUD && KartHUD->KartOverlay && PositionInScreen < KartHUD->KartOverlay->PositionsToShow && KartHUD->KartOverlay->PositionOverlay[PositionInScreen] != nullptr)
 	{
 		UPositionOverlay* WidgetToChange = KartHUD->KartOverlay->PositionOverlay[PositionInScreen];
 		if(WidgetToChange && WidgetToChange->DriverPosition && WidgetToChange->DriverName && WidgetToChange->DriverDifference)
@@ -141,17 +141,17 @@ void AKartPlayerController::SetHUDPosition_Implementation(const int32 PositionIn
 			WidgetToChange->SetVisibility(ESlateVisibility::Visible);
 			const FText PositionText = FText::FromString(FString::Printf(TEXT("%d"), Position+1));
 			WidgetToChange->DriverPosition->SetText(PositionText);
-			
+
 			WidgetToChange->DriverName->SetText(FText::FromString(PlayerName));
 
 			const int32 Seconds = FMath::FloorToInt(TimeDiff);
 			const int32 Milliseconds = FMath::FloorToInt(1000.f * (TimeDiff - Seconds));
 			const FText TimeDiffString = FText::FromString(FString::Printf(TEXT("%02d:%03d"), Seconds, Milliseconds));
 			WidgetToChange->DriverDifference->SetText(TimeDiffString);
-			if(KartHUD->KartOverlay->PositionsList)
+			if(KartHUD->KartOverlay->NearestPositions)
 			{
-				if(PositionInScreen == 0) KartHUD->KartOverlay->PositionsList->ClearListItems();
-				KartHUD->KartOverlay->PositionsList->AddItem(WidgetToChange);
+				if(PositionInScreen == 0) KartHUD->KartOverlay->NearestPositions->ClearChildren();
+				KartHUD->KartOverlay->NearestPositions->AddChildToVerticalBox(WidgetToChange);
 			}
 		}
 	}

@@ -17,10 +17,24 @@ ARaceGameMode::ARaceGameMode()
 	bDelayedStart = true;
 }
 
-void ARaceGameMode::PassedCheckpoint(AKartPlayerState* PlayerState)
+void ARaceGameMode::PassedCheckpoint_Implementation(AKartPlayerState* PlayerState)
 {
 	RaceGameState = (RaceGameState == nullptr) ? GetGameState<ARaceGameState>() : RaceGameState;
 	RaceGameState->UpdateTimeTable(PlayerState);
+}
+
+void ARaceGameMode::FinishedRace_Implementation(AKartPlayerState* Player, float TotalTime)
+{
+    if(Player)
+    {
+        FString PlayerName;
+        Player->GetName(PlayerName);
+        const int32 Minutes = FMath::Floor(TotalTime / 60);
+        const int32 Seconds = FMath::Floor(TotalTime - Minutes * 60);
+        const int32 Milliseconds = FMath::Floor(1000 * (TotalTime - FMath::Floor(TotalTime)));
+        UE_LOG(LogTemp, Warning, TEXT("Race Finished for %s! RaceTime: %d:%2d:%3d"),
+            *PlayerName, Minutes, Seconds, Milliseconds);
+    }
 }
 
 void ARaceGameMode::BeginPlay()
@@ -28,20 +42,20 @@ void ARaceGameMode::BeginPlay()
 	Super::BeginPlay();
 
 	ServerStartTime = GetWorld()->GetTimeSeconds();
-	
+
 	AActor* GroundCandidate = UGameplayStatics::GetActorOfClass(this, AGround::StaticClass());
 	if(GroundCandidate)
 	{
 		Ground = Cast<AGround>(GroundCandidate);
 		if(!Ground) return;
 	}
-	
+
 	USaveGame* SavedMap = UGameplayStatics::LoadGameFromSlot(TrackTempFileName, 0);
 	if(!SavedMap) return;
-	
+
 	const ULevelSaveGame* SavedLevel = Cast<ULevelSaveGame>(SavedMap);
 	if(!SavedLevel) return;
-	
+
 	// Create track
 	//if(!Ground->SetSplinePoints(SavedLevel->TrackPoints)) return;
 	RaceGameState = (RaceGameState == nullptr) ? GetGameState<ARaceGameState>() : RaceGameState;
@@ -69,11 +83,11 @@ void ARaceGameMode::StartRace()
 	{
 		if(Start) Start->Destroy();
 	}
-	
+
 	// Create AI to fill players until DesiredNumberOfPlayers
 	// Also, place karts at their positions starting from AI
 	const int32 NumberOfPlayers = GetNumPlayers();
-	
+
 	for(int32 Index = 0; Index < NumberOfPlayers; Index++)
 	{
 		AController* PlayerController = UGameplayStatics::GetPlayerController(this, Index);
@@ -137,21 +151,7 @@ void ARaceGameMode::StartRace()
 			}
 		}
 	}
-	
+
 	// Start
 	StartMatch();
-}
-
-void ARaceGameMode::FinishedRace(AKartPlayerState* Player, float TotalTime)
-{
-	if(Player)
-	{
-		FString PlayerName;
-		Player->GetName(PlayerName);
-		const int32 Minutes = FMath::Floor(TotalTime / 60);
-		const int32 Seconds = FMath::Floor(TotalTime - Minutes * 60);
-		const int32 Milliseconds = FMath::Floor(1000 * (TotalTime - FMath::Floor(TotalTime)));
-		UE_LOG(LogTemp, Warning, TEXT("Race Finished for %s! RaceTime: %d:%2d:%3d"),
-			*PlayerName, Minutes, Seconds, Milliseconds);
-	}
 }
