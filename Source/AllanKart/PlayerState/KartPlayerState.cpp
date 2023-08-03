@@ -21,24 +21,23 @@ void AKartPlayerState::BeginPlay()
 
 bool AKartPlayerState::FindController()
 {
-	/*
 	if(IsABot())
 	{
 		if(AIKartController) return true;
-		if(GetController())
+		if(GetPawn() && GetPawn()->GetController())
 		{
-			AIKartController = Cast<AAIKartController>(GetController());
+			AIKartController = Cast<AAIKartController>(GetPawn()->GetController());
 			return AIKartController != nullptr;
 		}
 		return false;
 	}
-	
+
 	if(KartPlayerController) return true;
-	if(GetController())
+	if(GetPawn() && GetPawn()->GetController())
 	{
-		KartPlayerController = Cast<AKartPlayerController>(GetController());
+		KartPlayerController = Cast<AKartPlayerController>(GetPawn()->GetController());
 		return KartPlayerController != nullptr;
-	}*/
+	}
 	return false;
 }
 

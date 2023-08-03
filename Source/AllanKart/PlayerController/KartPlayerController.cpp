@@ -161,7 +161,8 @@ void AKartPlayerController::UpdateLeaderboard()
 {
 	if(FindGameMode() && FindGameState() && KartPlayerState)
 	{
-		RaceGameMode->PassedCheckpoint(KartPlayerState);
+	    // Shouldn't be called here, since we call it already in Blueprints
+		// RaceGameMode->PassedCheckpoint(KartPlayerState);
 		const int32 NumPlayers = RaceGameState->Leaderboard.Num();
 		const int32 Position = RaceGameState->Leaderboard.Find(KartPlayerState);
 		if(Position < NumPlayers && RaceGameState->Leader != nullptr && KartHUD && KartHUD->KartOverlay)

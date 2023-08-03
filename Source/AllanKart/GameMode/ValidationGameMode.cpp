@@ -2,6 +2,8 @@
 
 
 #include "ValidationGameMode.h"
+
+#include "AllanKart/GameState/RaceGameState.h"
 #include "AllanKart/LevelEditor/Ground.h"
 #include "AllanKart/LevelEditor/LevelSaveGame.h"
 #include "AllanKart/PlayerController/KartPlayerController.h"
@@ -78,13 +80,8 @@ void AValidationGameMode::StartRace()
 
 void AValidationGameMode::PassedCheckpoint_Implementation(AKartPlayerState* Player)
 {
-	float PlayerSpeed = -1.f;
-	if(Player)
-	{
-	    const APawn* Pawn = Player->GetPawn();
-        if(!Pawn) return;
-	    PlayerSpeed = Pawn->GetVelocity().Size();
-	}
+    ARaceGameState* RaceGameState = GetGameState<ARaceGameState>();
+    if(RaceGameState) RaceGameState->UpdateTimeTable(Player);
 }
 
 void AValidationGameMode::FinishedRace_Implementation(AKartPlayerState* Player, float TotalTime)
