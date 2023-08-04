@@ -133,7 +133,6 @@ void AKartPlayerController::SetHUDRevs(float Revs, float MaxRevs)
 
 void AKartPlayerController::SetHUDPosition_Implementation(const int32 PositionInScreen, const int32 Position, const FString& PlayerName, const float TimeDiff)
 {
-	if(KartHUD && KartHUD->KartOverlay && PositionInScreen < KartHUD->KartOverlay->PositionsToShow && KartHUD->KartOverlay->PositionOverlay[PositionInScreen] != nullptr)
 	{
 		UPositionOverlay* WidgetToChange = KartHUD->KartOverlay->PositionOverlay[PositionInScreen];
 		if(WidgetToChange && WidgetToChange->DriverPosition && WidgetToChange->DriverName && WidgetToChange->DriverDifference)
